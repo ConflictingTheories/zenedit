@@ -599,21 +599,53 @@ var Editor = function Editor(_ref6) {
 
   useEffect(function () {
     if (editorRef.current) {
-      // Convert plain text with newlines to HTML with <br> tags
-      var htmlContent = content.split('\n').map(function (line) {
-        return line || '<br>';
-      }).join('<br>');
-      editorRef.current.innerHTML = htmlContent || '';
-      editorRef.current.focus();
+      var currentHTML = editorRef.current.innerHTML;
+      if (currentHTML !== content) {
+        editorRef.current.innerHTML = content || '';
+      }
+      if (!editorRef.current.innerHTML) {
+        editorRef.current.focus();
+      }
     }
   }, [content]);
 
+  useEffect(function () {
+    var handleKeyDown = function handleKeyDown(e) {
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
+        switch (e.key.toLowerCase()) {
+          case 'b':
+            e.preventDefault();
+            handleFormat('bold');
+            break;
+          case 'i':
+            e.preventDefault();
+            handleFormat('italic');
+            break;
+          case 'u':
+            e.preventDefault();
+            handleFormat('underline');
+            break;
+          case 's':
+            e.preventDefault();
+            handleFormat('strikeThrough');
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    if (editorRef.current) {
+      editorRef.current.addEventListener('keydown', handleKeyDown);
+      return function () {
+        return editorRef.current.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, []);
+
   var handleInput = function handleInput() {
     if (editorRef.current) {
-      // Convert <br> tags back to newlines when saving
-      var html = editorRef.current.innerHTML;
-      var plainText = html.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '');
-      onChange(plainText);
+      onChange(editorRef.current.innerHTML);
     }
   };
 
@@ -830,17 +862,12 @@ var ZenTextEditor = function ZenTextEditor() {
 
     if (isPlaying) {
       var ctx = getAudioContext();
-      // Try to resume if suspended (some browsers require user interaction)
+      // Resume context if suspended (required for some browsers)
       if (ctx.state === 'suspended') {
-        ctx.resume().then(function () {
-          audioRef.current = createNatureSound(activeScene.id, equalizerValues);
-        })['catch'](function () {
-          // If resume fails, still try to create sound
-          audioRef.current = createNatureSound(activeScene.id, equalizerValues);
-        });
-      } else {
-        audioRef.current = createNatureSound(activeScene.id, equalizerValues);
+        ctx.resume();
       }
+      // Create new audio regardless of resume status
+      audioRef.current = createNatureSound(activeScene.id, equalizerValues);
     }
   }, [isPlaying, activeScene.id, equalizerValues]);
 
