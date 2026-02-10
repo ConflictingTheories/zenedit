@@ -1,0 +1,13 @@
+{
+  "name": "zenedit",
+  "version": "1.0.0",
+  "description": "A peaceful writing environment with nature ambiance",
+  "main": "zen-editor.js",
+  "scripts": {
+    "build": "npx babel zen-editor.jsx -o zen-editor.js --presets=@babel/preset-react",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

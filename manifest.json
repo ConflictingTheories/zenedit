@@ -1,32 +1,14 @@
 {
+  "manifest_version": 3,
   "name": "Zen Text Editor",
   "short_name": "Zen Editor",
-  "description": "A peaceful writing environment with nature ambiance",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#1e1e28",
-  "theme_color": "#667eea",
-  "orientation": "any",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "categories": ["productivity", "utilities"],
-  "screenshots": [
-    {
-      "src": "screenshot.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ]
+  "version": "1.0.0",
+  "description": "A peaceful writing environment with nature ambiance for your new tab",
+  "permissions": ["storage"],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "action": {
+    "default_title": "Zen Text Editor"
+  }
 }
